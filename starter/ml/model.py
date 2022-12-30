@@ -169,7 +169,7 @@ def data():
 def required_columns():
     """ Dictionary of column names and their types"""
 
-    column_names_types = { "age": pd.api.types.is_integer_dtype,
+    column_names_types = {"age": pd.api.types.is_integer_dtype,
         "workclass": pd.api.types.is_string_dtype,
         "fnlgt": pd.api.types.is_integer_dtype,
         "education": pd.api.types.is_string_dtype,
@@ -187,7 +187,6 @@ def required_columns():
     }
 
     return column_names_types
-
 
 
 def test_data_shape(data):

@@ -1,10 +1,7 @@
 # Script to train machine learning model.
 import os
-# import sys
-import joblib
 
 import pandas as pd
-from typing import List, Tuple
 
 from sklearn.model_selection import train_test_split
 
@@ -70,5 +67,6 @@ print(f"Evaluation on Test: Precision {precision}, Recall {recall}, Fbeta {fbeta
 
 with open("slice_output.txt", "w") as ftxt:
     result_slicing = performance_slice_on_feature(
-        model, train, cat_features[0], cat_features, label_name, encoder, lb)
+        model, train, cat_features[0], cat_features, label_name, encoder, lb
+    )
     ftxt.write("".join([f"{k}: Precision {v[0]}, Recall {v[1]}, Fbeta {v[2]}\n" for k, v in result_slicing.items()]))

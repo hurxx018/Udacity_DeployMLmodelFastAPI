@@ -8,13 +8,13 @@ from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
 
 def process_data(
-    X: pd.DataFrame,
-    categorical_features: List[str]=[],
-    label: str=None,
-    training:bool=True,
-    encoder: OneHotEncoder=None,
-    lb: LabelBinarizer=None
-) -> Tuple[np.array, np.array, OneHotEncoder, LabelBinarizer]:
+        X: pd.DataFrame,
+        categorical_features: List[str] = [],
+        label: str = None,
+        training: bool = True,
+        encoder: OneHotEncoder = None,
+        lb: LabelBinarizer = None
+    ) -> Tuple[np.array, np.array, OneHotEncoder, LabelBinarizer]:
     """ Process the data used in the machine learning pipeline.
 
     Processes the data using one hot encoding for the categorical features and a
