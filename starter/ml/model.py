@@ -20,7 +20,7 @@ from .data import process_data
 def train_model(
         X_train: np.ndarray,
         y_train: np.ndarray
-    ) -> RandomForestClassifier:
+) -> RandomForestClassifier:
     """
     Trains a machine learning model and returns it.
 
@@ -56,9 +56,10 @@ def train_model(
 def compute_model_metrics(
         y: np.ndarray,
         preds: np.ndarray
-    ) -> Tuple[float, float, float]:
+) -> Tuple[float, float, float]:
     """
-    Validates the trained machine learning model using precision, recall, and F1.
+    Validates the trained machine learning model
+    using precision, recall, and F1.
 
     Inputs
     ------
@@ -100,7 +101,7 @@ def save_model(
         model: RandomForestClassifier,
         encoder: OneHotEncoder,
         lb: LabelBinarizer
-    ) -> None:
+) -> None:
     """ Save model, encoder, and lb
 
     Inputs
@@ -127,7 +128,9 @@ def save_model(
         joblib.dump(lb, flb)
 
 
-def load_model(path_directory):
+def load_model(
+        path_directory: str
+) -> Tuple[RandomForestClassifier, OneHotEncoder, LabelBinarizer]:
     """ Load model
 
     Inputs
@@ -159,17 +162,21 @@ def load_model(path_directory):
 @pytest.fixture(scope="session")
 def data():
     """ Get data """
-    path_data = os.path.join(os.path.dirname(__file__),
-        "..", "..", "data", "clean_data.csv")
+    path_data = os.path.join(
+        os.path.dirname(__file__),
+        "..", "..", "data", "clean_data.csv"
+    )
     df = pd.read_csv(path_data, sep=",")
 
     return df
+
 
 @pytest.fixture(scope="session")
 def required_columns():
     """ Dictionary of column names and their types"""
 
-    column_names_types = {"age": pd.api.types.is_integer_dtype,
+    column_names_types = {
+        "age": pd.api.types.is_integer_dtype,
         "workclass": pd.api.types.is_string_dtype,
         "fnlgt": pd.api.types.is_integer_dtype,
         "education": pd.api.types.is_string_dtype,
@@ -218,23 +225,39 @@ def test_class_names(data):
     """
 
     known_classes = {
-        "workclass": ['State-gov', 'Self-emp-not-inc', 'Private', 'Federal-gov',
-            'Local-gov', '?', 'Self-emp-inc', 'Without-pay', 'Never-worked'],
-        "education": ['Bachelors', 'HS-grad', '11th', 'Masters', '9th',
+        "workclass": [
+            'State-gov', 'Self-emp-not-inc', 'Private',
+            'Federal-gov', 'Local-gov', '?', 'Self-emp-inc',
+            'Without-pay', 'Never-worked'
+        ],
+        "education": [
+            'Bachelors', 'HS-grad', '11th', 'Masters', '9th',
             'Some-college', 'Assoc-acdm', '7th-8th', 'Doctorate', 'Assoc-voc',
-            'Prof-school', '5th-6th', '10th', '1st-4th', 'Preschool', '12th'],
-        "marital-status": ['Never-married', 'Married-civ-spouse', 'Divorced',
-            'Married-spouse-absent', 'Separated', 'Married-AF-spouse', 'Widowed'],
-        "occupation": ['Adm-clerical', 'Exec-managerial', 'Handlers-cleaners',
+            'Prof-school', '5th-6th', '10th', '1st-4th', 'Preschool', '12th'
+        ],
+        "marital-status": [
+            'Never-married', 'Married-civ-spouse', 'Divorced',
+            'Married-spouse-absent', 'Separated', 'Married-AF-spouse',
+            'Widowed'
+        ],
+        "occupation": [
+            'Adm-clerical', 'Exec-managerial', 'Handlers-cleaners',
             'Prof-specialty', 'Other-service', 'Sales', 'Transport-moving',
-            'Farming-fishing', 'Machine-op-inspct', 'Tech-support', 'Craft-repair',
-            '?', 'Protective-serv', 'Armed-Forces', 'Priv-house-serv'],
-        "relationship": ['Not-in-family', 'Husband', 'Wife', 'Own-child',
-            'Unmarried', 'Other-relative'],
-        "race": ['White', 'Black', 'Asian-Pac-Islander',
-            'Amer-Indian-Eskimo', 'Other'],
+            'Farming-fishing', 'Machine-op-inspct', 'Tech-support',
+            'Craft-repair', '?', 'Protective-serv', 'Armed-Forces',
+            'Priv-house-serv'
+        ],
+        "relationship": [
+            'Not-in-family', 'Husband', 'Wife', 'Own-child',
+            'Unmarried', 'Other-relative'
+        ],
+        "race": [
+            'White', 'Black', 'Asian-Pac-Islander',
+            'Amer-Indian-Eskimo', 'Other'
+        ],
         "sex": ['Male', 'Female'],
-        "native-country": ['United-States', 'Cuba', 'Jamaica', 'India',
+        "native-country": [
+            'United-States', 'Cuba', 'Jamaica', 'India',
             'Mexico', 'South', 'Puerto-Rico', 'Honduras', 'England',
             'Canada', 'Germany', 'Iran', 'Philippines', 'Italy',
             'Poland', 'Columbia', 'Cambodia', 'Thailand', 'Ecuador',
@@ -242,16 +265,18 @@ def test_class_names(data):
             'El-Salvador', 'France', 'Guatemala', 'China', 'Japan',
             'Yugoslavia', 'Peru', 'Outlying-US(Guam-USVI-etc)', 'Scotland',
             'Trinadad&Tobago', 'Greece', 'Nicaragua', 'Vietnam',
-            'Hong', 'Ireland', 'Hungary', 'Holand-Netherlands'],
+            'Hong', 'Ireland', 'Hungary', 'Holand-Netherlands'
+        ],
         "salary": ['<=50K', '>50K']
     }
 
     for col_name, classes_tmp in known_classes.items():
         for i, v in enumerate(data[col_name].isin(classes_tmp)):
-            if v == False:
+            if v is False:
                 print(i, data[col_name].iloc[i])
         assert data[col_name].isin(classes_tmp).all(), \
-            f"all values in column {col_name} are not contained in the list known_classes"
+            f"all values in column {col_name} are not contained \
+            in the list known_classes"
 
 
 def test_column_ranges(data):
@@ -270,10 +295,8 @@ def test_column_ranges(data):
 
     for col_name, (minmum, maximum) in range_values.items():
         assert data[col_name].dropna().between(minmum, maximum).all(), \
-            f"values in {col_name} are not in the range of ({minmum}, {maximum})"
-
-
-
+            f"values in {col_name} are not in the range \
+            of ({minmum}, {maximum})"
 
 
 # Data slicing
@@ -281,7 +304,7 @@ def get_performance(
         model: RandomForestClassifier,
         X: np.ndarray,
         y: np.ndarray
-    ) -> Tuple[float, float, float]:
+) -> Tuple[float, float, float]:
     """ Calculate model metrics
 
     Inputs
@@ -312,7 +335,7 @@ def performance_slice_on_feature(
         label: str,
         encoder: OneHotEncoder,
         lb: LabelBinarizer,
-    ) -> Dict[str, Tuple[float, float, float]]:
+) -> Dict[str, Tuple[float, float, float]]:
     """ Calculate metrics on slices of data for a given feature
 
     Inputs
@@ -340,14 +363,13 @@ def performance_slice_on_feature(
 
     """
 
-
     result = {}
     for value in data[feature].unique():
         data_tmp = data[data[feature] == value]
-        x_tmp, y_tmp, _, _ = process_data(data_tmp, categorical_features=categorical_features,
-            label=label, training=False, encoder=encoder, lb=lb)
+        x_tmp, y_tmp, _, _ = process_data(
+            data_tmp, categorical_features=categorical_features,
+            label=label, training=False, encoder=encoder, lb=lb
+        )
         result[value] = get_performance(model, x_tmp, y_tmp)
 
     return result
-
-
