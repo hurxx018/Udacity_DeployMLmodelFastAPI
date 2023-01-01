@@ -1,7 +1,5 @@
 import os
 
-from typing import List
-
 import pandas as pd
 
 from fastapi import FastAPI
@@ -9,7 +7,6 @@ from pydantic import BaseModel
 
 from starter.ml.data import process_data
 from starter.ml.model import load_model, inference
-
 
 
 alias_features = {
@@ -28,7 +25,6 @@ alias_features = {
     "hours_per_week": "hours-per-week",
     "native_country": "native-country",
 }
-
 
 
 class Value(BaseModel):
@@ -68,21 +64,20 @@ class Value(BaseModel):
         }
 
 
-
 app = FastAPI()
+
 
 @app.get("/")
 async def greeting():
-    return "Welcome" #{"greeting": f"Welcome"}
+    return {"greeting": "Welcome"}
 
 
 @app.post("/{path}")
 async def get_inference(path: int, query: int, body: Value):
 
-    tmp = {alias_features[key]:[value] for key, value in dict(body).items()}
-    # print(tmp)
+    tmp = {alias_features[key]: [value] for key, value in dict(body).items()}
+
     data = pd.DataFrame(tmp)
-    # print(data.head())
 
     cat_features = [
         "workclass",
@@ -96,10 +91,11 @@ async def get_inference(path: int, query: int, body: Value):
     ]
 
     model, encoder, lb = load_model(os.path.join(".", "model"))
-    # print(type(model))
-    x, _, _, _ = process_data(data, cat_features, label=None, training=False, encoder=encoder, lb=lb)
+
+    x, _, _, _ = process_data(
+        data, cat_features, label=None, training=False, encoder=encoder, lb=lb
+    )
 
     pred = inference(model, x).tolist()
-
 
     return {"predictions": pred}
