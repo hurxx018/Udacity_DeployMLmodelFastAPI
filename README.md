@@ -1,5 +1,5 @@
 # Udacity: Deploy an ML model using FastAPI
-Deploy an ML model using FastAPI
+An machine learning model is deployed using FastAPI to predict whether the income exceeds $50k (binary classification model).
 
 ## Details
 See model_card_template.md
