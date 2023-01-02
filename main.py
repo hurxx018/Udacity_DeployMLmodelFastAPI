@@ -67,6 +67,13 @@ class Value(BaseModel):
 app = FastAPI()
 
 
+@app.on_event("startup")
+async def startup_event():
+    global model, encoder, lb
+
+    model, encoder, lb = load_model(os.path.join(".", "model"))
+
+
 @app.get("/")
 async def greeting():
     return {"greeting": "Welcome"}
@@ -89,8 +96,6 @@ async def get_inference(path: int, query: int, body: Value):
         "sex",
         "native-country",
     ]
-
-    model, encoder, lb = load_model(os.path.join(".", "model"))
 
     x, _, _, _ = process_data(
         data, cat_features, label=None, training=False, encoder=encoder, lb=lb
