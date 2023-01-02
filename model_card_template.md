@@ -3,9 +3,9 @@
 ## Model Details
 Kwang Ho Hur created the model that is random forest.\
 Grid search was used with cross-validation using hyperparameters below:\
-n_estimators    : [200, 500]\
+n_estimators    : [5, 8]\
 max_features    : ['auto', 'sqrt']\
-max_depth       : [4, 5, 30]\
+max_depth       : [4, 5, 7]\
 criterion       : ['gini', 'entropy']
 
 ## Intended Use
@@ -21,6 +21,15 @@ The original data has 32561 rows. The data was split to the train and test sets 
 ## Metrics
 The model was evaluated on the test set using precision, recall, and f1 beta score. Their values are 0.77, 0.61, and 0.68, respectively.
 
+## Ethical Considerations
+Occupation categories are limited to be one of the following:\
+'Adm-clerical', 'Exec-managerial', 'Handlers-cleaners',\
+'Prof-specialty', 'Other-service', 'Sales', 'Transport-moving',\
+'Farming-fishing', 'Machine-op-inspct', 'Tech-support',\
+'Craft-repair', 'Protective-serv', 'Armed-Forces',\
+'Priv-house-serv'
+
+Some people might be out of this category.
 
 ## Caveats and Recommendations
 The data was created from 1994 Census database, so capital-gain and captial-loss must be adjused based on the inflation.
