@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8"]
+        python-version: ["3.9"]
 
     steps:
     - uses: actions/checkout@v3
@@ -37,3 +37,6 @@ jobs:
     - name: Test with pytest
       run: |
         pytest starter/ml/model.py -vv
+    - name: Run API testing with pytest
+      run: |
+        pytest tests/test_api.py -vv

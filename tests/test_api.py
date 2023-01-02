@@ -2,16 +2,15 @@ import os
 import sys
 import json
 
-import requests
-
 from fastapi.testclient import TestClient
 
-t=os.path.join(os.path.dirname(__file__), "..")
-sys.path.append(t)
+path = os.path.join(os.path.dirname(__file__), "..")
+sys.path.append(path)
 from main import app
 
 
 client = TestClient(app)
+
 
 # Test get
 def test_client():
@@ -21,7 +20,7 @@ def test_client():
     assert "greeting" in tmp
 
 
-
+# Test post: prediction:0
 def test_post_0():
     path = 1
     query = 2
@@ -42,17 +41,18 @@ def test_post_0():
         "native_country": "United-States"
     }
 
-    r = requests.post(
+    r = client.post(
         f"http://127.0.0.1:8000/{path}?query={query}", data=json.dumps(data)
     )
 
     tmp = dict(r.json())
-    print(tmp)
+
     assert r.status_code == 200
     assert "predictions" in tmp
     assert tmp["predictions"][0] == 0
 
 
+# Test post: prediction:1
 def test_post_1():
     path = 1
     query = 2
@@ -73,11 +73,10 @@ def test_post_1():
         "native_country": "United-States"
     }
 
-    r = requests.post(
+    r = client.post(
         f"http://127.0.0.1:8000/{path}?query={query}", data=json.dumps(data)
     )
     tmp = dict(r.json())
-    print(tmp)
 
     assert r.status_code == 200
     assert "predictions" in tmp
