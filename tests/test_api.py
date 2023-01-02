@@ -9,15 +9,16 @@ sys.path.append(path)
 from main import app
 
 
-client = TestClient(app)
+# client = TestClient(app)
 
 
 # Test get
 def test_client():
-    r = client.get("/")
-    tmp = dict(r.json())
-    assert r.status_code == 200
-    assert "greeting" in tmp
+    with TestClient(app) as client:
+        r = client.get("/")
+        tmp = dict(r.json())
+        assert r.status_code == 200
+        assert "greeting" in tmp
 
 
 # Test post: prediction:0
@@ -41,11 +42,12 @@ def test_post_0():
         "native_country": "United-States"
     }
 
-    r = client.post(
-        f"http://127.0.0.1:8000/{path}?query={query}", data=json.dumps(data)
-    )
+    with TestClient(app) as client:
+        r = client.post(
+            f"http://127.0.0.1:8000/{path}?query={query}", data=json.dumps(data)
+        )
 
-    tmp = dict(r.json())
+        tmp = dict(r.json())
 
     assert r.status_code == 200
     assert "predictions" in tmp
@@ -73,9 +75,10 @@ def test_post_1():
         "native_country": "United-States"
     }
 
-    r = client.post(
-        f"http://127.0.0.1:8000/{path}?query={query}", data=json.dumps(data)
-    )
+    with TestClient(app) as client:
+        r = client.post(
+            f"http://127.0.0.1:8000/{path}?query={query}", data=json.dumps(data)
+        )
     tmp = dict(r.json())
 
     assert r.status_code == 200

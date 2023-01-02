@@ -67,11 +67,15 @@ class Value(BaseModel):
 app = FastAPI()
 
 
+model_dict = {}
+
+
 @app.on_event("startup")
 async def startup_event():
-    global model, encoder, lb
-
     model, encoder, lb = load_model(os.path.join(".", "model"))
+    model_dict["model"] = model
+    model_dict["encoder"] = encoder
+    model_dict["lb"] = lb
 
 
 @app.get("/")
@@ -98,9 +102,10 @@ async def get_inference(path: int, query: int, body: Value):
     ]
 
     x, _, _, _ = process_data(
-        data, cat_features, label=None, training=False, encoder=encoder, lb=lb
+        data, cat_features, label=None, training=False,
+        encoder=model_dict["encoder"], lb=model_dict["lb"]
     )
 
-    pred = inference(model, x).tolist()
+    pred = inference(model_dict["model"], x).tolist()
 
     return {"predictions": pred}
