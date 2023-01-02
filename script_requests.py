@@ -39,7 +39,7 @@ data_1 = {
 }
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     # path_default= f"http://127.0.0.1:8000/{path}?query={query}"
 
